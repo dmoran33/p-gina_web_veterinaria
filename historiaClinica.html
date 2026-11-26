@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="institucional.css">
+  <title>Veterinaria La Mary - Historia Clínica</title>
+</head>
+
+<body>
+  <!-- Navbar Institucional -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">🐾 La Mary</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="institucional.html">Institucional</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contacto.html">Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="panelAdmin.html">Panel</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
+            <button class="btn btn-formulario" type="button" onclick="cerrarSesion()">Cerrar sesión</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div class="logo">
+      <h1>Veterinaria La Mary</h1>
+      <p>Especialistas en su bienestar y felicidad.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="container py-2">
+      <!-- Formulario de Registro de Evolución / Consulta -->
+      <article class="col-12 bg-body-secondary rounded-4 p-4 mb-4">
+        <form class="d-flex flex-column gap-3" id="form-historia">
+          <h3 class="fs-4 fw-semibold">NUEVA EVOLUCIÓN / HISTORIAL</h3>
+          <div class="row g-3">
+            <!-- Selector dinámico de Pacientes -->
+            <div class="col-md-6">
+              <label for="pacienteSelect" class="form-label">Paciente / Mascota</label>
+              <select name="pacienteSelect" id="pacienteSelect" class="form-select" required>
+                <option value="" selected disabled>Seleccione una mascota...</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="fechaAtencion" class="form-label">Fecha de Atención</label>
+              <input type="date" name="fechaAtencion" id="fechaAtencion" class="form-control" required>
+            </div>
+
+            <div class="col-md-12">
+              <label for="diagnostico" class="form-label">Diagnóstico / Motivo</label>
+              <input type="text" name="diagnostico" id="diagnostico" class="form-control" placeholder="Ej. Gastroenteritis aguda / Control periódico" required>
+            </div>
+
+            <div class="col-md-12">
+              <label for="tratamiento" class="form-label">Tratamiento e Indicaciones</label>
+              <textarea name="tratamiento" id="tratamiento" class="form-control" rows="3" placeholder="Detalle de medicación, dosis y pautas de cuidado..." required></textarea>
+            </div>
+          </div>
+
+          <div class="col-12 mt-4 text-center">
+            <button id="botonAgregarHistoria" class="btn btn-formulario" type="submit">Registrar en Historial</button>
+          </div>
+        </form>
+      </article>
+
+      <!-- Tabla de Listado de Historias Clínicas -->
+      <article class="col-12 bg-body-secondary rounded-4 p-4">
+        <span class="badge rounded-pill fw-semibold badge-mascotas">SEGUIMIENTO MÉDICO</span>
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 class="fs-3 fw-semibold mt-2">REGISTRO CLÍNICO</h2>
+          <span class="badge text-bg-secondary align-middle fs-5 align-self-center" id="totalHistorias">0</span>
+        </div>
+
+        <div class="table-responsive-md mt-3">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Paciente</th>
+                <th>Diagnóstico</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="listado-historias">
+              <!-- Filas dinámicas inyectadas mediante JS -->
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- Dialog para Visualizar el Historial Completo del Paciente -->
+    <dialog class="p-0 border-0 rounded-4 shadow bg-body text-body overflow-hidden" id="dialogVerHistorial" style="max-width: 650px; width: 100%;">
+      <div class="d-flex align-items-center justify-content-between p-3 bg-body-tertiary border-bottom">
+        <h5 class="modal-title fs-5 m-0">
+          <i class="bi bi-journal-medical me-2"></i>Historial Clínico: <span id="nombrePacienteModal" class="fw-bold"></span>
+        </h5>
+        <button type="button" class="btn-close" commandfor="dialogVerHistorial" command="close" aria-label="Close"></button>
+      </div>
+
+      <div class="p-4">
+        <div id="contenedorHistorialCompleto" class="d-flex flex-column gap-3" style="max-height: 400px; overflow-y: auto;">
+          <!-- Las evoluciones se inyectan aquí dinámicamente -->
+        </div>
+
+        <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+          <button type="button" class="btn btn-secondary px-4" commandfor="dialogVerHistorial" command="close">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Dialog Confirmación de Eliminación -->
+    <dialog class="p-0 border-0 rounded-4 shadow bg-body text-body overflow-hidden" id="dialogEliminarHistoria" style="max-width: 400px; width: 100%;">
+      <div class="p-4 text-center">
+        <div class="mb-3 text-danger fs-1">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <h5 class="mb-2">¿Estás seguro?</h5>
+        <p class="text-muted mb-4">Esta acción eliminará este registro clínico de forma permanente.</p>
+
+        <input type="hidden" id="deleteIdHistoria">
+
+        <div class="d-flex justify-content-center gap-2">
+          <button type="button" class="btn btn-secondary px-4" commandfor="dialogEliminarHistoria" command="close">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-danger px-4" id="btnConfirmarEliminarHistoria">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </dialog>
+  </main>
+
+  <footer>
+    <p>Veterinaria La Mary - Av. San Martín 1247, Concordia, Entre Rios</p>
+    <p>Trabajo Final Integrador - Introducción al Desarrollo Web 2026</p>
+  </footer>
+
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="./sesion.js"></script>
+  <script defer src="./historiaClinica.js"></script>
+</body>
+
+</html>

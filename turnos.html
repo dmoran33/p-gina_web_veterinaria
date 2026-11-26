@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="institucional.css">
+  <title>Veterinaria La Mary - Institucional</title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="index.html">🐾 La Mary</a>
+
+      <!-- Botón hamburguesa -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menú -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="institucional.html">Institucional</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contacto.html">Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="panelAdmin.html">Panel</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
+            <button class="btn btn-formulario" type="button" onclick="cerrarSesion()">Cerrar sesión</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div class="logo">
+      <h1>Veterinaria La Mary</h1>
+      <p>Especialistas en su bienestar y felicidad.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="container py-2">
+    
+      <article class="col-12 bg-body-secondary rounded-4 p-4 mb-4">
+        <form class="d-flex flex-column gap-3" id="form-turnos">
+          <h3 class="fs-4 fw-semibold">NUEVO TURNO</h3>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="nombreDuenio" class="form-label">Dueño / Tutor</label>
+              <input type="text" name="nombreDuenio" id="nombreDuenio" class="form-control" maxlength="35" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="nombreMascota" class="form-label">Nombre de la Mascota</label>
+              <input type="text" name="nombreMascota" id="nombreMascota" class="form-control" maxlength="25" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="fechaTurno" class="form-label">Fecha del Turno</label>
+              <input type="date" name="fechaTurno" id="fechaTurno" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="horaTurno" class="form-label">Hora del Turno</label>
+              <input type="time" name="horaTurno" id="horaTurno" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="motivo" class="form-label">Motivo de la Consulta</label>
+              <select name="motivo" id="motivo" class="form-select" required>
+                <option value="" selected disabled>Seleccione un motivo</option>
+                <option value="Consulta General">Consulta General</option>
+                <option value="Vacunación">Vacunación</option>
+                <option value="Desparasitación">Desparasitación</option>
+                <option value="Cirugía / Estereilización">Cirugía / Esterilización</option>
+                <option value="Control Peluquería/Estética">Peluquería / Baño</option>
+                <option value="Urgencia">Urgencia</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="veterinario" class="form-label">Veterinario Asignado</label>
+              <select name="veterinario" id="veterinario" class="form-select" required>
+                <option value="" selected disabled>Seleccione un veterinario...</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="col-12 mt-4 text-center">
+            <button id="botonAgregarTurno" class="btn btn-formulario" type="submit">Agendar Turno</button>
+          </div>
+        </form>
+      </article>
+
+      
+      <article class="col-12 bg-body-secondary rounded-4 p-4">
+        <span class="badge rounded-pill fw-semibold badge-mascotas">CITAS Y TURNOS</span>
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 class="fs-3 fw-semibold mt-2">REGISTRO DE TURNOS</h2>
+          <span class="badge text-bg-secondary align-middle fs-5 align-self-center" id="totalTurnos">0</span>
+        </div>
+
+        <div class="table-responsive-md mt-3">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th>Fecha y Hora</th>
+                <th>Dueño</th>
+                <th>Mascota</th>
+                <th>Motivo</th>
+                <th>Veterinario</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="listado-turnos">
+            
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+   
+    <dialog class="p-0 border-0 rounded-4 shadow bg-body text-body overflow-hidden" id="dialogEliminarTurno" style="max-width: 400px; width: 100%;">
+      <div class="p-4 text-center">
+        <div class="mb-3 text-danger fs-1">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <h5 class="mb-2">¿Cancelar turno?</h5>
+        <p class="text-muted mb-4">Esta acción eliminará la cita del registro de forma permanente.</p>
+
+        <input type="hidden" id="eliminarIdTurno">
+
+        <div class="d-flex justify-content-center gap-2">
+          <button type="button" class="btn btn-secondary px-4" commandfor="dialogEliminarTurno" command="close">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-danger px-4" id="btnConfirmarEliminarTurno">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </dialog>
+  </main>
+
+  <footer>
+    <p>Veterinaria La Mary - Av. San Martín 1247, Concordia, Entre Rios</p>
+    <p>Trabajo Final Integrador - Introducción al Desarrollo Web 2026</p>
+  </footer>
+
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="./sesion.js"></script>
+  <script defer src="./turnos.js"></script>
+</body>
+
+</html>
